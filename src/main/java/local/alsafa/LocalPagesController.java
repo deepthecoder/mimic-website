@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,6 +47,22 @@ public class LocalPagesController {
     @GetMapping("/blog-details.php")
     public String blogDetail(@RequestParam(defaultValue = "1") String id) {
         return "forward:/blog-details-" + ("2".equals(id) ? "2" : "1") + ".html";
+    }
+
+    @GetMapping("/contact.php.html")
+    public ResponseEntity<Resource> contactPage() {
+        return staticPage("contact.php.html");
+    }
+
+    @GetMapping("/career.php.html")
+    public ResponseEntity<Resource> careerPage() {
+        return staticPage("career.php.html");
+    }
+
+    private static ResponseEntity<Resource> staticPage(String filename) {
+        Resource page = new ClassPathResource("static/" + filename);
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore())
+                .contentType(MediaType.parseMediaType("text/html;charset=UTF-8")).body(page);
     }
 
     @PostMapping(value = "/quote", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

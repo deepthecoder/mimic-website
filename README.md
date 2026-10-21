@@ -15,6 +15,15 @@ mvn spring-boot:run
 ```
 
 Open **http://localhost:8080/** and click **Get Quote**.
+To run Spring Boot on port 9003, stop any old process on that port and run
+`PORT=9003 mvn clean spring-boot:run` from the directory containing `pom.xml`.
+Then open **http://localhost:9003/contact.php.html**. The `clean` step removes
+previously compiled classes. A successful page request returns HTTP 200:
+
+```bash
+curl -sS -o /dev/null -w 'HTTP %{http_code}\n' http://localhost:9003/contact.php.html
+```
+
 Start only one backend at a time. Both handle the quote, contact and career
 forms and keep submissions in `data/submissions.jsonl`. Quote delivery
 results are appended to `data/mail-delivery.jsonl`; uploaded resumes go to
